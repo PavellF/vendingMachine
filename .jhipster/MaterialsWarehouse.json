@@ -1,0 +1,35 @@
+{
+    "name": "MaterialsWarehouse",
+    "fields": [
+        {
+            "fieldName": "title",
+            "fieldType": "String"
+        },
+        {
+            "fieldName": "left",
+            "fieldType": "Integer"
+        },
+        {
+            "fieldName": "maxAmount",
+            "fieldType": "Integer"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "materials",
+            "otherEntityName": "cofeeMaterial",
+            "otherEntityRelationshipName": "materialsWarehouse"
+        }
+    ],
+    "changelogDate": "20180922120830",
+    "entityTableName": "materials_warehouse",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "angularJSSuffix": "appSuffix"
+}

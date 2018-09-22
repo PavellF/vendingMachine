@@ -1,0 +1,27 @@
+{
+    "name": "Coffee",
+    "fields": [
+        {
+            "fieldName": "title",
+            "fieldType": "String"
+        }
+    ],
+    "relationships": [
+        {
+            "relationshipType": "one-to-many",
+            "relationshipName": "cofee",
+            "otherEntityName": "cofeeMaterial",
+            "otherEntityRelationshipName": "coffee"
+        }
+    ],
+    "changelogDate": "20180922120828",
+    "entityTableName": "coffee",
+    "dto": "mapstruct",
+    "pagination": "pagination",
+    "service": "serviceImpl",
+    "jpaMetamodelFiltering": false,
+    "fluentMethods": true,
+    "clientRootFolder": "",
+    "applications": "*",
+    "angularJSSuffix": "appSuffix"
+}
