@@ -1,11 +1,9 @@
 package com.mycompany.myapp;
 
-import com.mycompany.myapp.config.ApplicationProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.core.env.Environment;
 
@@ -13,7 +11,6 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ApplicationProperties.class})
 @EnableCaching
 public class VendingMachineApp {
 
