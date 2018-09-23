@@ -28,7 +28,9 @@ public class CofeeMaterialServiceImpl implements CofeeMaterialService {
 
     private final CofeeMaterialMapper cofeeMaterialMapper;
 
-    public CofeeMaterialServiceImpl(CofeeMaterialRepository cofeeMaterialRepository, CofeeMaterialMapper cofeeMaterialMapper) {
+    public CofeeMaterialServiceImpl(
+    		CofeeMaterialRepository cofeeMaterialRepository, 
+    		CofeeMaterialMapper cofeeMaterialMapper) {
         this.cofeeMaterialRepository = cofeeMaterialRepository;
         this.cofeeMaterialMapper = cofeeMaterialMapper;
     }
@@ -42,7 +44,8 @@ public class CofeeMaterialServiceImpl implements CofeeMaterialService {
     @Override
     public CofeeMaterialDTO save(CofeeMaterialDTO cofeeMaterialDTO) {
         log.debug("Request to save CofeeMaterial : {}", cofeeMaterialDTO);
-        CofeeMaterial cofeeMaterial = cofeeMaterialMapper.toEntity(cofeeMaterialDTO);
+        CofeeMaterial cofeeMaterial = cofeeMaterialMapper
+        		.toEntity(cofeeMaterialDTO);
         cofeeMaterial = cofeeMaterialRepository.save(cofeeMaterial);
         return cofeeMaterialMapper.toDto(cofeeMaterial);
     }

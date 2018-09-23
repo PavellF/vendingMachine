@@ -7,7 +7,6 @@ import com.mycompany.myapp.repository.CofeeMaterialRepository;
 import com.mycompany.myapp.service.CofeeMaterialService;
 import com.mycompany.myapp.service.dto.CofeeMaterialDTO;
 import com.mycompany.myapp.service.mapper.CofeeMaterialMapper;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -61,9 +60,6 @@ public class CofeeMaterialResourceIntTest {
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
     @Autowired
-    private ExceptionTranslator exceptionTranslator;
-
-    @Autowired
     private EntityManager em;
 
     private MockMvc restCofeeMaterialMockMvc;
@@ -76,7 +72,6 @@ public class CofeeMaterialResourceIntTest {
         final CofeeMaterialResource cofeeMaterialResource = new CofeeMaterialResource(cofeeMaterialService);
         this.restCofeeMaterialMockMvc = MockMvcBuilders.standaloneSetup(cofeeMaterialResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
     }
