@@ -21,7 +21,8 @@ public class Coffee implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, 
+    	generator = "sequenceGenerator")
     @SequenceGenerator(name = "sequenceGenerator")
     private Long id;
 
@@ -32,7 +33,6 @@ public class Coffee implements Serializable {
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CofeeMaterial> cofees = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -78,8 +78,7 @@ public class Coffee implements Serializable {
     public void setCofees(Set<CofeeMaterial> cofeeMaterials) {
         this.cofees = cofeeMaterials;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

@@ -13,8 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 /**
  * Service Implementation for managing Coffee.
  */
@@ -25,15 +23,16 @@ public class CoffeeServiceImpl implements CoffeeService {
     private final Logger log = LoggerFactory.getLogger(CoffeeServiceImpl.class);
 
     private final CoffeeRepository coffeeRepository;
-
+    
     private final CoffeeMapper coffeeMapper;
 
-    public CoffeeServiceImpl(CoffeeRepository coffeeRepository, CoffeeMapper coffeeMapper) {
-        this.coffeeRepository = coffeeRepository;
-        this.coffeeMapper = coffeeMapper;
-    }
+    public CoffeeServiceImpl(CoffeeRepository coffeeRepository,
+			CoffeeMapper coffeeMapper) {
+		this.coffeeRepository = coffeeRepository;
+		this.coffeeMapper = coffeeMapper;
+	}
 
-    /**
+	/**
      * Save a coffee.
      *
      * @param coffeeDTO the entity to save
@@ -63,20 +62,6 @@ public class CoffeeServiceImpl implements CoffeeService {
 
 
     /**
-     * Get one coffee by id.
-     *
-     * @param id the id of the entity
-     * @return the entity
-     */
-    @Override
-    @Transactional(readOnly = true)
-    public Optional<CoffeeDTO> findOne(Long id) {
-        log.debug("Request to get Coffee : {}", id);
-        return coffeeRepository.findById(id)
-            .map(coffeeMapper::toDto);
-    }
-
-    /**
      * Delete the coffee by id.
      *
      * @param id the id of the entity
@@ -86,4 +71,5 @@ public class CoffeeServiceImpl implements CoffeeService {
         log.debug("Request to delete Coffee : {}", id);
         coffeeRepository.deleteById(id);
     }
+
 }
