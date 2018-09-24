@@ -34,7 +34,7 @@ public class CoffeeMapperImpl implements CoffeeMapper {
 	
 	@Override
 	public CoffeeDTO toDto(Coffee entity) {
-		return Optional.of(entity).map(TO_DTO).orElseGet(null);
+		return Optional.ofNullable(entity).map(TO_DTO).orElseGet(null);
 	}
 
 	@Override
@@ -55,7 +55,7 @@ public class CoffeeMapperImpl implements CoffeeMapper {
 
 	@Override
 	public Coffee toEntity(CoffeeDTO coffeeDTO) {
-		return Optional.of(coffeeDTO).map(TO_ENTITY).orElseGet(null);
+		return Optional.ofNullable(coffeeDTO).map(TO_ENTITY).orElseGet(null);
 	}
 
 }

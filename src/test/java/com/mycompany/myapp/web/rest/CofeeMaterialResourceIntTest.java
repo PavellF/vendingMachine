@@ -3,10 +3,13 @@ package com.mycompany.myapp.web.rest;
 import com.mycompany.myapp.VendingMachineApp;
 
 import com.mycompany.myapp.domain.CofeeMaterial;
+import com.mycompany.myapp.domain.Coffee;
+import com.mycompany.myapp.domain.MaterialsWarehouse;
 import com.mycompany.myapp.repository.CofeeMaterialRepository;
 import com.mycompany.myapp.service.CofeeMaterialService;
 import com.mycompany.myapp.service.dto.CofeeMaterialDTO;
 import com.mycompany.myapp.service.mapper.CofeeMaterialMapper;
+import com.mycompany.myapp.web.rest.errors.ExceptionAdvice;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -41,8 +44,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = VendingMachineApp.class)
 public class CofeeMaterialResourceIntTest {
 
-    private static final Integer DEFAULT_AMOUNT = 1;
-    private static final Integer UPDATED_AMOUNT = 2;
+    private static final Integer DEFAULT_AMOUNT = 150;
+    private static final Integer UPDATED_AMOUNT = 200;
 
     @Autowired
     private CofeeMaterialRepository cofeeMaterialRepository;
@@ -58,6 +61,9 @@ public class CofeeMaterialResourceIntTest {
 
     @Autowired
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
+    
+    @Autowired
+    private ExceptionAdvice exceptionAdvice;
 
     @Autowired
     private EntityManager em;
@@ -73,7 +79,8 @@ public class CofeeMaterialResourceIntTest {
         this.restCofeeMaterialMockMvc = MockMvcBuilders.standaloneSetup(cofeeMaterialResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
             .setConversionService(createFormattingConversionService())
-            .setMessageConverters(jacksonMessageConverter).build();
+            .setMessageConverters(jacksonMessageConverter)
+            .setControllerAdvice(exceptionAdvice).build();
     }
 
     /**
@@ -83,9 +90,47 @@ public class CofeeMaterialResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static CofeeMaterial createEntity(EntityManager em) {
-        CofeeMaterial cofeeMaterial = new CofeeMaterial()
-            .amount(DEFAULT_AMOUNT);
-        return cofeeMaterial;
+    	
+    	Coffee coffee = new Coffee();
+    	coffee.setTitle("capuchino");
+    	em.persist(coffee);
+    	
+    	MaterialsWarehouse water = new MaterialsWarehouse();
+    	water.setLeft(2000);
+    	water.setMaxAmount(9000);
+    	water.setTitle("Water");
+    	em.persist(water);
+    	
+    	MaterialsWarehouse milk = new MaterialsWarehouse();
+    	milk.setLeft(2000);
+    	milk.setMaxAmount(9000);
+    	milk.setTitle("Milk");
+    	em.persist(milk);
+    	
+    	MaterialsWarehouse coffeeBeans = new MaterialsWarehouse();
+    	coffeeBeans.setLeft(4000);
+    	coffeeBeans.setMaxAmount(9000);
+    	coffeeBeans.setTitle("Coffee beans");
+    	em.persist(coffeeBeans);
+    	
+    	CofeeMaterial waterMaterial = new CofeeMaterial();
+    	waterMaterial.setAmount(DEFAULT_AMOUNT);
+    	waterMaterial.setCoffee(coffee);
+    	waterMaterial.setMaterialsWarehouse(water);
+    	
+    	CofeeMaterial milkMaterial = new CofeeMaterial();
+    	milkMaterial.setAmount(100);
+    	milkMaterial.setCoffee(coffee);
+    	milkMaterial.setMaterialsWarehouse(milk);
+    	em.persist(milkMaterial);
+    	
+    	CofeeMaterial coffeeBeansMaterial = new CofeeMaterial();
+    	coffeeBeansMaterial.setAmount(15);
+    	coffeeBeansMaterial.setCoffee(coffee);
+    	coffeeBeansMaterial.setMaterialsWarehouse(coffeeBeans);
+    	em.persist(coffeeBeansMaterial);
+    	
+    	return waterMaterial;
     }
 
     @Before
@@ -180,8 +225,7 @@ public class CofeeMaterialResourceIntTest {
         CofeeMaterial updatedCofeeMaterial = cofeeMaterialRepository.findById(cofeeMaterial.getId()).get();
         // Disconnect from session so that the updates on updatedCofeeMaterial are not directly saved in db
         em.detach(updatedCofeeMaterial);
-        updatedCofeeMaterial
-            .amount(UPDATED_AMOUNT);
+        updatedCofeeMaterial.amount(UPDATED_AMOUNT);
         CofeeMaterialDTO cofeeMaterialDTO = cofeeMaterialMapper.toDto(updatedCofeeMaterial);
 
         restCofeeMaterialMockMvc.perform(put("/api/cofee-materials")
@@ -191,6 +235,7 @@ public class CofeeMaterialResourceIntTest {
 
         // Validate the CofeeMaterial in the database
         List<CofeeMaterial> cofeeMaterialList = cofeeMaterialRepository.findAll();
+        
         assertThat(cofeeMaterialList).hasSize(databaseSizeBeforeUpdate);
         CofeeMaterial testCofeeMaterial = cofeeMaterialList.get(cofeeMaterialList.size() - 1);
         assertThat(testCofeeMaterial.getAmount()).isEqualTo(UPDATED_AMOUNT);
@@ -204,7 +249,7 @@ public class CofeeMaterialResourceIntTest {
         // Create the CofeeMaterial
         CofeeMaterialDTO cofeeMaterialDTO = cofeeMaterialMapper.toDto(cofeeMaterial);
 
-        // If the entity doesn't have an ID, it will throw BadRequestAlertException
+        // If the entity doesn't have an ID, it will not go
         restCofeeMaterialMockMvc.perform(put("/api/cofee-materials")
             .contentType(TestUtil.APPLICATION_JSON_UTF8)
             .content(TestUtil.convertObjectToJsonBytes(cofeeMaterialDTO)))
@@ -236,7 +281,8 @@ public class CofeeMaterialResourceIntTest {
     @Test
     @Transactional
     public void equalsVerifier() throws Exception {
-        TestUtil.equalsVerifier(CofeeMaterial.class);
+    	
+    	TestUtil.equalsVerifier(CofeeMaterial.class);
         CofeeMaterial cofeeMaterial1 = new CofeeMaterial();
         cofeeMaterial1.setId(1L);
         CofeeMaterial cofeeMaterial2 = new CofeeMaterial();

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * All exceptions ever thrown in time of processing request will be intercepted 
  * and routed to this class handlers.
  * */
-@RestControllerAdvice
+@RestControllerAdvice("com.mycompany.myapp.web.rest")
 @Component
 public class ExceptionAdvice {
 	
@@ -26,7 +26,7 @@ public class ExceptionAdvice {
 		
 		StringBuilder details = new StringBuilder("To assembly ");
 		details.append(e.getEntityName().orElse("requested entity"));
-		details.append(" you going to need the following inredients:");
+		details.append(" you are going to need the following inredients:");
 		
 		e.getTitleAmountNeededPair().forEach((String title, Integer amount) -> {
 			details.append('\n');

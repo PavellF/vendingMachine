@@ -1,10 +1,13 @@
 package com.mycompany.myapp.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -22,24 +25,28 @@ public class MaterialsWarehouse implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title")
+    @Size(min = 1, max = 64)
+    @NotNull
     private String title;
 
     @Column(name = "materials_left")
+    @NotNull
+    @PositiveOrZero
     private Integer left;
 
     @Column(name = "max_amount")
+    @Positive
+    @NotNull
     private Integer maxAmount;
 
     @OneToMany(mappedBy = "materialsWarehouse")
     @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private Set<CofeeMaterial> materials = new HashSet<>();
 
-    // jhipster-needle-entity-add-field - JHipster will add fields here, do not remove
     public Long getId() {
         return id;
     }
@@ -111,8 +118,7 @@ public class MaterialsWarehouse implements Serializable {
     public void setMaterials(Set<CofeeMaterial> cofeeMaterials) {
         this.materials = cofeeMaterials;
     }
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here, do not remove
-
+    
     @Override
     public boolean equals(Object o) {
         if (this == o) {

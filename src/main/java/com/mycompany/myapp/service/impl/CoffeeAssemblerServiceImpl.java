@@ -10,6 +10,7 @@ import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.mycompany.myapp.domain.CofeeMaterial;
 import com.mycompany.myapp.domain.Coffee;
@@ -27,6 +28,7 @@ import com.mycompany.myapp.web.rest.errors.NotEnoughIngredientsException;
  **/
 @Service
 @SuppressWarnings("unused")
+@Transactional
 public class CoffeeAssemblerServiceImpl implements CoffeeAssemblerService {
 
 
@@ -84,7 +86,7 @@ public class CoffeeAssemblerServiceImpl implements CoffeeAssemblerService {
         		
         	});
         	
-        	if (notEnoughMaterials.isEmpty()) {
+        	if (notEnoughMaterials.isEmpty() && !toUpdate.isEmpty()) {
         		materialsWarehouseRepository.saveAll(toUpdate);
         	} else {
         		throw new NotEnoughIngredientsException(

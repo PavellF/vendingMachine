@@ -33,3 +33,5 @@ server:
 
 logging:
     file: target/vendingMachine.log
+    
+counterMaxValue: 8

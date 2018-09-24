@@ -24,14 +24,16 @@ public class CofeeMaterialMapperImpl implements CofeeMaterialMapper {
 		CofeeMaterial toMap = new CofeeMaterial();
 		toMap.setId(cm.getId());
 		toMap.setAmount(cm.getAmount());
-		
+	
 		Coffee coffee = new Coffee();
 		coffee.setId(cm.getCoffeeId());
 		toMap.setCoffee(coffee);
-		
+	
+	
 		MaterialsWarehouse materialsWarehouse = new MaterialsWarehouse();
 		materialsWarehouse.setId(cm.getMaterialsWarehouseId());
 		toMap.setMaterialsWarehouse(materialsWarehouse);
+	
 		
 		return toMap;
 	};
@@ -47,7 +49,7 @@ public class CofeeMaterialMapperImpl implements CofeeMaterialMapper {
 				}
 				
 				if (cm.getMaterialsWarehouse() != null) {
-					map.setCoffeeId(cm.getMaterialsWarehouse().getId());
+					map.setMaterialsWarehouseId(cm.getMaterialsWarehouse().getId());
 				}
 				
 				return map;
@@ -71,12 +73,12 @@ public class CofeeMaterialMapperImpl implements CofeeMaterialMapper {
 
 	@Override
 	public CofeeMaterialDTO toDto(CofeeMaterial cofeeMaterial) {
-		return Optional.of(cofeeMaterial).map(TO_DTO).orElse(null);
+		return Optional.ofNullable(cofeeMaterial).map(TO_DTO).orElse(null);
 	}
 
 	@Override
 	public CofeeMaterial toEntity(CofeeMaterialDTO cofeeMaterialDTO) {
-		return Optional.of(cofeeMaterialDTO).map(TO_POJO).orElse(null);
+		return Optional.ofNullable(cofeeMaterialDTO).map(TO_POJO).orElse(null);
 	}
 
 }
