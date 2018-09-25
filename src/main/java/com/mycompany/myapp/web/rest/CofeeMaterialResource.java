@@ -19,6 +19,8 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 /**
  * REST controller for managing CofeeMaterial.
  */
@@ -48,7 +50,7 @@ public class CofeeMaterialResource {
      */
     @PostMapping("/cofee-materials")
     public ResponseEntity<CofeeMaterialDTO> createCofeeMaterial(
-    		@RequestBody CofeeMaterialDTO cofeeMaterialDTO) 
+    		@RequestBody @Valid CofeeMaterialDTO cofeeMaterialDTO) 
     				throws URISyntaxException {
     	
         log.debug("REST request to save CofeeMaterial : {}", cofeeMaterialDTO);
@@ -84,7 +86,7 @@ public class CofeeMaterialResource {
      */
     @PutMapping("/cofee-materials")
     public ResponseEntity<CofeeMaterialDTO> updateCofeeMaterial(
-    		@RequestBody CofeeMaterialDTO cofeeMaterialDTO) 
+    		@RequestBody @Valid CofeeMaterialDTO cofeeMaterialDTO) 
     				throws URISyntaxException {
     	
         log.debug("REST request to update CofeeMaterial : {}",cofeeMaterialDTO);

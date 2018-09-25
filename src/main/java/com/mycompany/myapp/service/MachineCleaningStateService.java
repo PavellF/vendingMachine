@@ -13,7 +13,9 @@ public interface MachineCleaningStateService {
 	
 	/**
 	 * Cleans machine.
+	 * @return false means counter has not set on maximum value yet 
+	 * and this machine could not be cleaned.
 	 * */
-	void clean();
+	boolean clean();
 	
 }

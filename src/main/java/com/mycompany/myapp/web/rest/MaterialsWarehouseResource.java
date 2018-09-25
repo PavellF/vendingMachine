@@ -19,6 +19,8 @@ import java.net.URISyntaxException;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 /**
  * REST controller for managing MaterialsWarehouse.
  */
@@ -49,7 +51,7 @@ public class MaterialsWarehouseResource {
      */
     @PostMapping("/materials-warehouses")
     public ResponseEntity<MaterialsWarehouseDTO> createMaterialsWarehouse(
-    		@RequestBody MaterialsWarehouseDTO materialsWarehouseDTO) 
+    		@RequestBody @Valid MaterialsWarehouseDTO materialsWarehouseDTO) 
     				throws URISyntaxException {
         log.debug("REST request to save MaterialsWarehouse : {}", 
         		materialsWarehouseDTO);
@@ -59,6 +61,16 @@ public class MaterialsWarehouseResource {
     		.withStatus(HttpStatus.BAD_REQUEST)
     		.withCode("idexists")
     		.withDetail("A new materialsWarehouse cannot already have an ID")
+    		.withTitle(ENTITY_NAME)
+    		.withType(URI.create("/api/materials-warehouses"))
+    		.build();
+        }
+        
+        if (materialsWarehouseDTO.getLeft() > materialsWarehouseDTO.getMaxAmount()) {
+        	throw Error.builder()
+    		.withStatus(HttpStatus.BAD_REQUEST)
+    		.withCode("logicexception")
+    		.withDetail("Amount left cannot be greater than max amount of material.")
     		.withTitle(ENTITY_NAME)
     		.withType(URI.create("/api/materials-warehouses"))
     		.build();
@@ -87,7 +99,7 @@ public class MaterialsWarehouseResource {
      */
     @PutMapping("/materials-warehouses")
     public ResponseEntity<MaterialsWarehouseDTO> updateMaterialsWarehouse(
-    		@RequestBody MaterialsWarehouseDTO materialsWarehouseDTO) 
+    		@RequestBody @Valid MaterialsWarehouseDTO materialsWarehouseDTO) 
     				throws URISyntaxException {
     	
         log.debug("REST request to update MaterialsWarehouse : {}", 
@@ -98,6 +110,16 @@ public class MaterialsWarehouseResource {
     		.withStatus(HttpStatus.BAD_REQUEST)
     		.withCode("idnull")
     		.withDetail("Invalid id")
+    		.withTitle(ENTITY_NAME)
+    		.withType(URI.create("/api/materials-warehouses"))
+    		.build();
+        }
+        
+        if (materialsWarehouseDTO.getLeft() > materialsWarehouseDTO.getMaxAmount()) {
+        	throw Error.builder()
+    		.withStatus(HttpStatus.BAD_REQUEST)
+    		.withCode("logicexception")
+    		.withDetail("Amount left cannot be greater than max amount of material.")
     		.withTitle(ENTITY_NAME)
     		.withType(URI.create("/api/materials-warehouses"))
     		.build();

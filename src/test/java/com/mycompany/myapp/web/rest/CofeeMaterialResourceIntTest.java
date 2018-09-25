@@ -46,6 +46,7 @@ public class CofeeMaterialResourceIntTest {
 
     private static final Integer DEFAULT_AMOUNT = 150;
     private static final Integer UPDATED_AMOUNT = 200;
+    private static final Integer INVALID_AMOUNT = -600;
 
     @Autowired
     private CofeeMaterialRepository cofeeMaterialRepository;
@@ -92,7 +93,7 @@ public class CofeeMaterialResourceIntTest {
     public static CofeeMaterial createEntity(EntityManager em) {
     	
     	Coffee coffee = new Coffee();
-    	coffee.setTitle("capuchino");
+    	coffee.setTitle("Capuchino");
     	em.persist(coffee);
     	
     	MaterialsWarehouse water = new MaterialsWarehouse();
@@ -130,6 +131,7 @@ public class CofeeMaterialResourceIntTest {
     	coffeeBeansMaterial.setMaterialsWarehouse(coffeeBeans);
     	em.persist(coffeeBeansMaterial);
     	
+    	em.clear();
     	return waterMaterial;
     }
 
@@ -239,6 +241,34 @@ public class CofeeMaterialResourceIntTest {
         assertThat(cofeeMaterialList).hasSize(databaseSizeBeforeUpdate);
         CofeeMaterial testCofeeMaterial = cofeeMaterialList.get(cofeeMaterialList.size() - 1);
         assertThat(testCofeeMaterial.getAmount()).isEqualTo(UPDATED_AMOUNT);
+    }
+    
+    @Test
+    @Transactional
+    public void updateCofeeMaterialWithInvalidAmountValue() throws Exception {
+        // Initialize the database
+        cofeeMaterialRepository.saveAndFlush(cofeeMaterial);
+
+        int databaseSizeBeforeUpdate = cofeeMaterialRepository.findAll().size();
+
+        // Update the cofeeMaterial
+        CofeeMaterial updatedCofeeMaterial = cofeeMaterialRepository.findById(cofeeMaterial.getId()).get();
+        // Disconnect from session so that the updates on updatedCofeeMaterial are not directly saved in db
+        em.detach(updatedCofeeMaterial);
+        updatedCofeeMaterial.amount(INVALID_AMOUNT);
+        CofeeMaterialDTO cofeeMaterialDTO = cofeeMaterialMapper.toDto(updatedCofeeMaterial);
+
+        restCofeeMaterialMockMvc.perform(put("/api/cofee-materials")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(cofeeMaterialDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the CofeeMaterial in the database
+        List<CofeeMaterial> cofeeMaterialList = cofeeMaterialRepository.findAll();
+        
+        assertThat(cofeeMaterialList).hasSize(databaseSizeBeforeUpdate);
+        CofeeMaterial testCofeeMaterial = cofeeMaterialList.get(cofeeMaterialList.size() - 1);
+        assertThat(testCofeeMaterial.getAmount()).isEqualTo(DEFAULT_AMOUNT);
     }
 
     @Test

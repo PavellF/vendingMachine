@@ -26,7 +26,7 @@ public class ExceptionAdvice {
 		
 		StringBuilder details = new StringBuilder("To assembly ");
 		details.append(e.getEntityName().orElse("requested entity"));
-		details.append(" you are going to need the following inredients:");
+		details.append(" you need to add the following inredients:");
 		
 		e.getTitleAmountNeededPair().forEach((String title, Integer amount) -> {
 			details.append('\n');

@@ -3,13 +3,18 @@ package com.mycompany.myapp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.validation.constraints.Size;
+
 /**
  * A DTO for the Coffee entity.
  */
 public class CoffeeDTO implements Serializable {
 
-    private Long id;
+    private static final long serialVersionUID = 1L;
 
+	private Long id;
+
+    @Size(min = 1, max = 64)
     private String title;
 
     public Long getId() {

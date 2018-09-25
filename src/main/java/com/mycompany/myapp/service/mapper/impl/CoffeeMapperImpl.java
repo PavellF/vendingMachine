@@ -28,7 +28,7 @@ public class CoffeeMapperImpl implements CoffeeMapper {
 			(CoffeeDTO dto) -> {
 		Coffee c = new Coffee();
 		c.setId(dto.getId());
-		c.setTitle(c.getTitle());
+		c.setTitle(dto.getTitle());
 		return c;
 	};
 	

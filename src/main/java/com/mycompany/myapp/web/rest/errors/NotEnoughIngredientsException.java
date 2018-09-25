@@ -19,7 +19,8 @@ public class NotEnoughIngredientsException extends RuntimeException {
 			Map<String, Integer> titleAmountNeededPair) {
 		
 		if (titleAmountNeededPair == null || titleAmountNeededPair.isEmpty()) {
-			throw new NullPointerException();
+			throw new IllegalArgumentException("In order to throw this "
+					+ "exception not empty titleAmountNeededPair must be provided.");
 		}
 		
 		this.titleAmountNeededPair = titleAmountNeededPair;

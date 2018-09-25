@@ -18,9 +18,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-
 import java.util.List;
-import java.util.Optional;
+import javax.validation.Valid;
 
 /**
  * REST controller for managing Coffee.
@@ -58,7 +57,7 @@ public class CoffeeResource {
      */
     @PostMapping("/coffees")
     public ResponseEntity<CoffeeDTO> createCoffee(
-    		@RequestBody CoffeeDTO coffeeDTO) throws URISyntaxException {
+    		@RequestBody @Valid CoffeeDTO coffeeDTO) throws URISyntaxException {
     	
         log.debug("REST request to save Coffee : {}", coffeeDTO);
         
@@ -90,7 +89,7 @@ public class CoffeeResource {
      */
     @PutMapping("/coffees")
     public ResponseEntity<CoffeeDTO> updateCoffee(
-    		@RequestBody CoffeeDTO coffeeDTO) throws URISyntaxException {
+    		@RequestBody @Valid CoffeeDTO coffeeDTO) throws URISyntaxException {
     	
         log.debug("REST request to update Coffee : {}", coffeeDTO);
         
@@ -139,8 +138,8 @@ public class CoffeeResource {
         log.debug("REST request to get Coffee : {}", id);
         
         if(mcss.increaseCounter()) {
-        	Optional<CoffeeDTO> coffeeDTO = coffeeAssemblerService.assemblyOne(id);
-        	return coffeeDTO.map(coffee -> ResponseEntity.ok(coffee))
+        	return coffeeAssemblerService.assemblyOne(id)
+        			.map(coffee -> ResponseEntity.ok(coffee))
         			.orElse(ResponseEntity.notFound().build());
         } 
         	
@@ -165,5 +164,21 @@ public class CoffeeResource {
         coffeeService.delete(id);
         return ResponseEntity.ok().headers(HeaderUtil
         		.createEntityDeletionAlert(ENTITY_NAME, id.toString())).build();
+    }
+    
+    /**
+     * PUT  /coffees/clean : Cleans coffee machine
+     *
+     * @return the empty ResponseEntity with status 204 (No Content), 
+     * or with status 400 (Bad Request) if machine can not be cleaned.
+     * @throws URISyntaxException if the Location URI syntax is incorrect
+     */
+    @PutMapping("/coffees/clean")
+    public ResponseEntity<?> clean() throws URISyntaxException {
+    	
+        log.debug("REST request to recharge coffee machine");
+        return mcss.clean() 
+        		? ResponseEntity.noContent().build()
+        		: ResponseEntity.badRequest().build();
     }
 }

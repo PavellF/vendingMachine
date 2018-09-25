@@ -1,13 +1,12 @@
 package com.mycompany.myapp.web.rest;
 
 import com.mycompany.myapp.VendingMachineApp;
-
 import com.mycompany.myapp.domain.MaterialsWarehouse;
 import com.mycompany.myapp.repository.MaterialsWarehouseRepository;
 import com.mycompany.myapp.service.MaterialsWarehouseService;
 import com.mycompany.myapp.service.dto.MaterialsWarehouseDTO;
 import com.mycompany.myapp.service.mapper.MaterialsWarehouseMapper;
-import com.mycompany.myapp.web.rest.errors.ExceptionTranslator;
+import com.mycompany.myapp.web.rest.errors.ExceptionAdvice;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -42,14 +41,18 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(classes = VendingMachineApp.class)
 public class MaterialsWarehouseResourceIntTest {
 
-    private static final String DEFAULT_TITLE = "AAAAAAAAAA";
-    private static final String UPDATED_TITLE = "BBBBBBBBBB";
+    private static final String DEFAULT_TITLE = "Water";
+    private static final String UPDATED_TITLE = "Water updated";
+    private static final String INVALID_TITLE = "WaterWaterWaterWaterWater"
+    		+ "WaterWaterWaterWaterWaterWaterWaterWater";
 
-    private static final Integer DEFAULT_LEFT = 1;
-    private static final Integer UPDATED_LEFT = 2;
+    private static final Integer DEFAULT_LEFT = 700;
+    private static final Integer UPDATED_LEFT = 900;
+    private static final Integer INVALID_LEFT = 7;
 
-    private static final Integer DEFAULT_MAX_AMOUNT = 1;
-    private static final Integer UPDATED_MAX_AMOUNT = 2;
+    private static final Integer DEFAULT_MAX_AMOUNT = 9000;
+    private static final Integer UPDATED_MAX_AMOUNT = 7000;
+    private static final Integer INVALID_MAX_AMOUNT = 0;
 
     @Autowired
     private MaterialsWarehouseRepository materialsWarehouseRepository;
@@ -67,7 +70,7 @@ public class MaterialsWarehouseResourceIntTest {
     private PageableHandlerMethodArgumentResolver pageableArgumentResolver;
 
     @Autowired
-    private ExceptionTranslator exceptionTranslator;
+    private ExceptionAdvice exceptionAdvice;
 
     @Autowired
     private EntityManager em;
@@ -82,7 +85,7 @@ public class MaterialsWarehouseResourceIntTest {
         final MaterialsWarehouseResource materialsWarehouseResource = new MaterialsWarehouseResource(materialsWarehouseService);
         this.restMaterialsWarehouseMockMvc = MockMvcBuilders.standaloneSetup(materialsWarehouseResource)
             .setCustomArgumentResolvers(pageableArgumentResolver)
-            .setControllerAdvice(exceptionTranslator)
+            .setControllerAdvice(exceptionAdvice)
             .setConversionService(createFormattingConversionService())
             .setMessageConverters(jacksonMessageConverter).build();
     }
@@ -94,7 +97,7 @@ public class MaterialsWarehouseResourceIntTest {
      * if they test an entity which requires the current entity.
      */
     public static MaterialsWarehouse createEntity(EntityManager em) {
-        MaterialsWarehouse materialsWarehouse = new MaterialsWarehouse()
+    	MaterialsWarehouse materialsWarehouse = new MaterialsWarehouse()
             .title(DEFAULT_TITLE)
             .left(DEFAULT_LEFT)
             .maxAmount(DEFAULT_MAX_AMOUNT);
@@ -103,7 +106,7 @@ public class MaterialsWarehouseResourceIntTest {
 
     @Before
     public void initTest() {
-        materialsWarehouse = createEntity(em);
+    	materialsWarehouse = createEntity(em);
     }
 
     @Test
@@ -217,6 +220,38 @@ public class MaterialsWarehouseResourceIntTest {
         assertThat(testMaterialsWarehouse.getTitle()).isEqualTo(UPDATED_TITLE);
         assertThat(testMaterialsWarehouse.getLeft()).isEqualTo(UPDATED_LEFT);
         assertThat(testMaterialsWarehouse.getMaxAmount()).isEqualTo(UPDATED_MAX_AMOUNT);
+    }
+    
+    @Test
+    @Transactional
+    public void shouldNotUpdateInvalidMaterialsWarehouse() throws Exception {
+        // Initialize the database
+        materialsWarehouseRepository.saveAndFlush(materialsWarehouse);
+
+        int databaseSizeBeforeUpdate = materialsWarehouseRepository.findAll().size();
+
+        // Update the materialsWarehouse
+        MaterialsWarehouse updatedMaterialsWarehouse = materialsWarehouseRepository.findById(materialsWarehouse.getId()).get();
+        // Disconnect from session so that the updates on updatedMaterialsWarehouse are not directly saved in db
+        em.detach(updatedMaterialsWarehouse);
+        updatedMaterialsWarehouse
+            .title(INVALID_TITLE)
+            .left(INVALID_LEFT)
+            .maxAmount(INVALID_MAX_AMOUNT);
+        MaterialsWarehouseDTO materialsWarehouseDTO = materialsWarehouseMapper.toDto(updatedMaterialsWarehouse);
+
+        restMaterialsWarehouseMockMvc.perform(put("/api/materials-warehouses")
+            .contentType(TestUtil.APPLICATION_JSON_UTF8)
+            .content(TestUtil.convertObjectToJsonBytes(materialsWarehouseDTO)))
+            .andExpect(status().isBadRequest());
+
+        // Validate the MaterialsWarehouse in the database
+        List<MaterialsWarehouse> materialsWarehouseList = materialsWarehouseRepository.findAll();
+        assertThat(materialsWarehouseList).hasSize(databaseSizeBeforeUpdate);
+        MaterialsWarehouse testMaterialsWarehouse = materialsWarehouseList.get(materialsWarehouseList.size() - 1);
+        assertThat(testMaterialsWarehouse.getTitle()).isEqualTo(DEFAULT_TITLE);
+        assertThat(testMaterialsWarehouse.getLeft()).isEqualTo(DEFAULT_LEFT);
+        assertThat(testMaterialsWarehouse.getMaxAmount()).isEqualTo(DEFAULT_MAX_AMOUNT);
     }
 
     @Test

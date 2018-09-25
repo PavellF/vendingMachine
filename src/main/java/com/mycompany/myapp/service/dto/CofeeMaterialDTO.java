@@ -3,6 +3,8 @@ package com.mycompany.myapp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.validation.constraints.Positive;
+
 /**
  * A DTO for the CofeeMaterial entity.
  */
@@ -11,6 +13,7 @@ public class CofeeMaterialDTO implements Serializable {
 
     private Long id;
 
+    @Positive
     private Integer amount;
 
     private Long coffeeId;

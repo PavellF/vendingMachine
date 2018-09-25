@@ -79,18 +79,19 @@ public class CoffeeAssemblerServiceImpl implements CoffeeAssemblerService {
         		Integer resourcesLeft = availableResouces - amountNeeded;
         		
         		if (resourcesLeft < 0) {
-        			notEnoughMaterials.put(warehouse.getTitle(), resourcesLeft);
+        			notEnoughMaterials.put(warehouse.getTitle(), Math.abs(resourcesLeft));
         		} else {
+        			warehouse.setLeft(resourcesLeft);
         			toUpdate.add(warehouse);
         		}
         		
         	});
         	
-        	if (notEnoughMaterials.isEmpty() && !toUpdate.isEmpty()) {
+        	if (notEnoughMaterials.isEmpty()) {
         		materialsWarehouseRepository.saveAll(toUpdate);
         	} else {
-        		throw new NotEnoughIngredientsException(
-        				c.getTitle(), notEnoughMaterials);
+        		throw new NotEnoughIngredientsException(c.getTitle(), 
+        				notEnoughMaterials);
         	}
         	
         });

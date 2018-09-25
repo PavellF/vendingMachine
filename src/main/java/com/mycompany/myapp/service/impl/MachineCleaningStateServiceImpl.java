@@ -37,8 +37,12 @@ public class MachineCleaningStateServiceImpl
 	}
 
 	@Override
-	public synchronized void clean() {
-		counter = 0;
+	public synchronized boolean clean() {
+		if (counter == maxAmount) {
+			counter = 0;
+			return true;
+		}
+		return false;
 	}
 
 }

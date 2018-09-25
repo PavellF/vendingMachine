@@ -3,6 +3,10 @@ package com.mycompany.myapp.service.dto;
 import java.io.Serializable;
 import java.util.Objects;
 
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
+import javax.validation.constraints.Size;
+
 /**
  * A DTO for the MaterialsWarehouse entity.
  */
@@ -12,10 +16,13 @@ public class MaterialsWarehouseDTO implements Serializable {
 	
     private Long id;
 
+    @Size(min = 1, max = 64)
     private String title;
 
+    @PositiveOrZero
     private Integer left;
 
+    @Positive
     private Integer maxAmount;
 
     public Long getId() {
