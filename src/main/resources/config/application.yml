@@ -30,6 +30,7 @@ server:
         session:
             cookie:
                 http-only: true
+        context-path: /
 
 logging:
     file: target/vendingMachine.log
