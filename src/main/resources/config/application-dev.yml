@@ -8,17 +8,10 @@
 # http://docs.spring.io/spring-boot/docs/current/reference/html/common-application-properties.html
 # ===================================================================
 
-logging:
-    level:
-        ROOT: DEBUG
-        io.github.jhipster: DEBUG
-        com.mycompany.myapp: DEBUG
 
 spring:
     profiles:
         active: dev
-        include:
-            - swagger
     jackson:
         serialization.INDENT_OUTPUT: true
     datasource:

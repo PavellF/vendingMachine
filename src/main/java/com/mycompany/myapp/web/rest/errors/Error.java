@@ -3,6 +3,7 @@ package com.mycompany.myapp.web.rest.errors;
 import java.net.URI;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -13,6 +14,7 @@ import java.util.HashMap;
  * Generic web application exception. Immutable.
  * */
 @JsonInclude(Include.NON_NULL)
+@JsonIgnoreProperties({"cause", "stackTrace", "suppressed"})
 public class Error extends RuntimeException {
 
 	private static final long serialVersionUID = 697793250324190441L;

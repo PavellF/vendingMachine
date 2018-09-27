@@ -7,6 +7,7 @@ import com.mycompany.myapp.web.rest.errors.Error;
 import com.mycompany.myapp.web.rest.util.HeaderUtil;
 import com.mycompany.myapp.web.rest.util.PaginationUtil;
 import com.mycompany.myapp.service.dto.CoffeeDTO;
+import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -67,7 +68,7 @@ public class CoffeeResource {
 	    		.withCode("idexists")
 	    		.withDetail("A new coffee cannot already have an ID")
 	    		.withTitle(ENTITY_NAME)
-	    		.withType(URI.create("/api/cofees/"))
+	    		.withType(URI.create("/api/coffees/"))
 	    		.build();
         }
         CoffeeDTO result = coffeeService.save(coffeeDTO);
@@ -99,7 +100,7 @@ public class CoffeeResource {
     		.withCode("idnull")
     		.withDetail("Invalid id")
     		.withTitle(ENTITY_NAME)
-    		.withType(URI.create("/api/cofees/"))
+    		.withType(URI.create("/api/coffees/"))
     		.build();
         }
         

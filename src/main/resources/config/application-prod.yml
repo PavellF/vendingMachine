@@ -12,7 +12,6 @@ logging:
     level:
         ROOT: INFO
         com.mycompany.myapp: INFO
-        io.github.jhipster: INFO
 
 spring:
     datasource:
