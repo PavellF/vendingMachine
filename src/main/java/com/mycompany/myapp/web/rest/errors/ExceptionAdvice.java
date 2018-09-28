@@ -1,10 +1,12 @@
 package com.mycompany.myapp.web.rest.errors;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+
 
 
 /**
@@ -19,6 +21,17 @@ public class ExceptionAdvice {
 	public ResponseEntity<Error> errorHandler(Error e) {
 		return ResponseEntity.status(e.getStatus()).body(e);
 	}
+
+    @ExceptionHandler(ConstraintViolationException.class)
+    public ResponseEntity<Error> errorHandler(ConstraintViolationException e) {
+        Error error = Error.builder()
+            .withStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+            .withDetail("You sended invalid data change it and try again.")
+            .withCode("dataerror")
+            .withTitle("Invalid data.")
+            .build();
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(error);
+    }
 	
 	@ExceptionHandler(NotEnoughIngredientsException.class)
 	public ResponseEntity<Error> coffeeAssemblyErrorHandler(

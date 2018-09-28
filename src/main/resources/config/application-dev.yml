@@ -16,6 +16,7 @@ spring:
         serialization.INDENT_OUTPUT: true
     datasource:
         initialization-mode: ALWAYS
+        data: classpath:data.sql
         schema: classpath:schema.sql
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:vendingmachine;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE

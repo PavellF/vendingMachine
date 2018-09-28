@@ -47,10 +47,10 @@ public class TestUtil {
     }
 
     /**
-     * Create a byte array with a specific size filled with specified data.
+     * Create a byte array with a specific size filled with specified data.sql.
      *
      * @param size the size of the byte array
-     * @param data the data to put in the byte array
+     * @param data the data.sql to put in the byte array
      * @return the JSON byte array
      */
     public static byte[] createByteArray(int size, String data) {

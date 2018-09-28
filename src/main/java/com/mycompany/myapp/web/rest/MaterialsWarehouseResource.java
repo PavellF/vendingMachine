@@ -69,7 +69,7 @@ public class MaterialsWarehouseResource {
         if (materialsWarehouseDTO.getLeft() > materialsWarehouseDTO.getMaxAmount()) {
         	throw Error.builder()
     		.withStatus(HttpStatus.BAD_REQUEST)
-    		.withCode("logicexception")
+    		.withCode("overflow")
     		.withDetail("Amount left cannot be greater than max amount of material.")
     		.withTitle(ENTITY_NAME)
     		.withType(URI.create("/api/materials-warehouses"))
@@ -118,7 +118,7 @@ public class MaterialsWarehouseResource {
         if (materialsWarehouseDTO.getLeft() > materialsWarehouseDTO.getMaxAmount()) {
         	throw Error.builder()
     		.withStatus(HttpStatus.BAD_REQUEST)
-    		.withCode("logicexception")
+    		.withCode("overflow")
     		.withDetail("Amount left cannot be greater than max amount of material.")
     		.withTitle(ENTITY_NAME)
     		.withType(URI.create("/api/materials-warehouses"))

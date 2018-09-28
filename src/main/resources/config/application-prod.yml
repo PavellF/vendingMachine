@@ -14,9 +14,16 @@ logging:
         com.mycompany.myapp: INFO
 
 spring:
+    h2:
+        console:
+            enabled: true
+            path: /h2
     datasource:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:vendingmachine
+        initialization-mode: ALWAYS
+        data: classpath:data.sql
+        schema: classpath:schema.sql
         username: vendingMachine
         password:
         hikari:
@@ -31,7 +38,6 @@ spring:
             hibernate.cache.use_second_level_cache: true
             hibernate.cache.use_query_cache: false
             hibernate.generate_statistics: false
-            hibernate.cache.region.factory_class: org.hibernate.cache.ehcache.EhCacheRegionFactory
  
 server:
     port: 8080

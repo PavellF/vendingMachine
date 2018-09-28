@@ -13,7 +13,7 @@ spring:
     application:
         name: vendingMachine
     profiles:
-        active: dev
+        active: prod
     jpa:
         open-in-view: false
         hibernate:
