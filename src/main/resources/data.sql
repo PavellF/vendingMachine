@@ -1,3 +1,5 @@
+BEGIN TRANSACTION;
+
 INSERT INTO coffee(id, title) VALUES (DEFAULT, 'Capuchino');
 
 INSERT INTO materials_warehouse(id, title, materials_left, max_amount) VALUES (DEFAULT, 'Water', 1000, 2000);
@@ -23,3 +25,5 @@ DEFAULT,
 15,
 SELECT id FROM coffee WHERE title='Capuchino',
 SELECT id FROM materials_warehouse WHERE title = 'Coffee beans');
+
+COMMIT;

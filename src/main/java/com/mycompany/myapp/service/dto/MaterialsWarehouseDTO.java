@@ -22,7 +22,7 @@ public class MaterialsWarehouseDTO implements Serializable {
     @PositiveOrZero
     private Integer left;
 
-    @Positive
+    @Positive(message = "Maximum amount that warehouse can hold should be positive")
     private Integer maxAmount;
 
     public Long getId() {
