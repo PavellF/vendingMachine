@@ -179,8 +179,16 @@ public class CoffeeResource {
         "returns bad request status code")
     public ResponseEntity<?> clean() throws URISyntaxException {
     	log.debug("REST request to recharge coffee machine");
-        return mcss.clean() 
-        		? ResponseEntity.noContent().build()
-        		: ResponseEntity.badRequest().build();
+
+    	if (mcss.clean()) {
+    	    return ResponseEntity.noContent().build();
+        }
+
+        throw Error.builder()
+            .withTitle("Could not clean")
+            .withStatus(HttpStatus.BAD_REQUEST)
+            .withCode("failclean")
+            .withDetail("Machine is not in cleaning state yet")
+            .withType(URI.create("/api/coffees/clean")).build();
     }
 }

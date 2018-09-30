@@ -22,7 +22,7 @@ spring:
         type: com.zaxxer.hikari.HikariDataSource
         url: jdbc:h2:mem:vendingmachine
         initialization-mode: ALWAYS
-        data: classpath:data.sql
+        data: classpath:initialData.sql
         schema: classpath:schema.sql
         username: vendingMachine
         password:

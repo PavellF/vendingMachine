@@ -325,7 +325,7 @@ public class CoffeeResourceIntTest {
         restCoffeeMockMvc.perform(get("/api/coffees/{id}", coffee.getId()))
         .andExpect(status().isInternalServerError());
         
-        restCoffeeMockMvc.perform(put("/api/coffees/clean"))
+        restCoffeeMockMvc.perform(post("/api/coffees/clean"))
         .andExpect(status().isNoContent());
     }
 
