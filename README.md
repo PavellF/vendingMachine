@@ -1,12 +1,13 @@
 # vendingMachine
 
 This Spring Boot application uses h2 in-memory database as data source, 
-default cache implementation based on ConcurrentHashMap.
+default cache implementation based on ConcurrentHashMap. 
 
 ### Run with IDE
 
-Import as maven project, run main method in VendingMachineApp 
-and go to localhost:8080/swagger-ui.html
+Import as maven project, change profile to ``prod`` in 
+application.yml, run main method in VendingMachineApp 
+and go to http://localhost:8080/swagger-ui.html#/
 If you encounter problems try to delete .m2 folder.
 
 ### Run without IDE
@@ -16,9 +17,9 @@ Download repository, cd to folder containing pom.xml then
 
 ``mvn clean install``<br>
 ``cd target``<br>
-``java -jar %jarname%``<br>
+``sudo java -jar -Dspring.profiles.active=prod vending-machine-1.0.jar``<br>
 
-Go to localhost:8080/swagger-ui.html
+Go to http://localhost:8080/swagger-ui.html#/
 
 ### Description
 
