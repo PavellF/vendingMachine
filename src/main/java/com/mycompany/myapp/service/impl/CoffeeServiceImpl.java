@@ -13,6 +13,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 /**
  * Service Implementation for managing Coffee.
  */
@@ -32,7 +34,21 @@ public class CoffeeServiceImpl implements CoffeeService {
 		this.coffeeMapper = coffeeMapper;
 	}
 
-	/**
+    /**
+     * Get one coffee by id.
+     *
+     * @param id the id of the entity
+     * @return the entity
+     */
+    @Override
+    @Transactional(readOnly = true)
+    public Optional<CoffeeDTO> findOne(Long id) {
+        log.debug("Request to get Coffee : {}", id);
+        return coffeeRepository.findById(id).map(coffeeMapper::toDto);
+    }
+
+
+    /**
      * Save a coffee.
      *
      * @param coffeeDTO the entity to save

@@ -67,19 +67,7 @@ public class MaterialsWarehouseResource {
         new CreateMaterialsWarehouseValidator().validate(materialsWarehouseDTO, errors);
 
         if (errors.hasErrors()) {
-            throw Error.builder()
-                .withStatus(HttpStatus.BAD_REQUEST)
-                .withCode(String.join(", ", errors
-                    .getAllErrors()
-                    .stream().map(ObjectError::getCode)
-                    .collect(Collectors.toList())))
-                .withDetail(String.join(", ", errors
-                    .getAllErrors()
-                    .stream().map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList())))
-                .withTitle("Validation error")
-                .withType(URI.create("/api/materials-warehouses"))
-                .build();
+            throw Error.validationError("/api/materials-warehouses", errors);
         }
 
         MaterialsWarehouseDTO result = materialsWarehouseService.save(materialsWarehouseDTO);
@@ -111,19 +99,7 @@ public class MaterialsWarehouseResource {
         new UpdateMaterialsWarehouseValidator(materialsWarehouseService).validate(materialsWarehouseDTO, errors);
 
         if (errors.hasErrors()) {
-            throw Error.builder()
-                .withStatus(HttpStatus.BAD_REQUEST)
-                .withCode(String.join(", ", errors
-                    .getAllErrors()
-                    .stream().map(ObjectError::getCode)
-                    .collect(Collectors.toList())))
-                .withDetail(String.join(", ", errors
-                    .getAllErrors()
-                    .stream().map(ObjectError::getDefaultMessage)
-                    .collect(Collectors.toList())))
-                .withTitle("Validation error")
-                .withType(URI.create("/api/materials-warehouses"))
-                .build();
+            throw Error.validationError("/api/materials-warehouses", errors);
         }
 
         MaterialsWarehouseDTO result = materialsWarehouseService.save(materialsWarehouseDTO);

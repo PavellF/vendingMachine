@@ -9,8 +9,7 @@ import com.mycompany.myapp.service.MachineCleaningStateService;
  * Basic implementation for {@code MachineCleaningStateService}.
  **/
 @Service
-public class MachineCleaningStateServiceImpl
-		implements MachineCleaningStateService {
+public class MachineCleaningStateServiceImpl implements MachineCleaningStateService {
 
 	private volatile int counter = 0;
 	

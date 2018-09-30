@@ -8,7 +8,11 @@ import org.springframework.http.HttpStatus;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
+import org.springframework.validation.Errors;
+import org.springframework.validation.ObjectError;
+
 import java.util.HashMap;
+import java.util.stream.Collectors;
 
 /**
  * Generic web application exception. Immutable.
@@ -61,6 +65,21 @@ public class Error extends RuntimeException {
 	public static Builder builder() {
 		return new Builder();
 	}
+
+    public static Error validationError(String path, Errors errors) {
+        return new Builder().withStatus(HttpStatus.BAD_REQUEST)
+            .withCode(String.join(", ", errors
+                .getAllErrors()
+                .stream().map(ObjectError::getCode)
+                .collect(Collectors.toList())))
+            .withDetail(String.join(", ", errors
+                .getAllErrors()
+                .stream().map(ObjectError::getDefaultMessage)
+                .collect(Collectors.toList())))
+            .withTitle("Validation error")
+            .withType(URI.create(path))
+            .build();
+    }
 	
 	/**
 	 * Builder to build {@link Error}.
@@ -114,6 +133,8 @@ public class Error extends RuntimeException {
 		public Error build() {
 			return new Error(this);
 		}
+
+
 	}
 	
 	@Override

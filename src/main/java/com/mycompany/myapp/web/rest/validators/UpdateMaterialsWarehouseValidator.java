@@ -44,6 +44,7 @@ public class UpdateMaterialsWarehouseValidator implements Validator {
 
         if (id == null) {
             errors.rejectValue("id", "idnull", "Id must not be null");
+            return;
         }
 
         MaterialsWarehouseDTO existing = materialsWarehouseService.findOne(id).orElse(null);

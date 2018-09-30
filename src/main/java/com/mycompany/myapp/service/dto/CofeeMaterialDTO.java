@@ -52,6 +52,25 @@ public class CofeeMaterialDTO implements Serializable {
         this.materialsWarehouseId = materialsWarehouseId;
     }
 
+    /**
+     * Sets values from another object on null fields.
+     * @param with source or values (they can be null as well)
+     * */
+    public void mergeNull(CofeeMaterialDTO with) {
+        if (id == null) {
+            setId(with.getId());
+        }
+        if (amount == null) {
+            setAmount(with.getAmount());
+        }
+        if (coffeeId == null) {
+            setCoffeeId(with.getCoffeeId());
+        }
+        if (materialsWarehouseId == null) {
+            setMaterialsWarehouseId(with.getMaterialsWarehouseId());
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
